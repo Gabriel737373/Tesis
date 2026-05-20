@@ -1,0 +1,46 @@
+# Backend
+backend/**/build/
+backend/**/.gradle/
+backend/**/.idea/
+backend/**/*.class
+backend/**/*.jar
+backend/**/*.zip
+
+# Frontend
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.docker/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+.claude/
+.next/
+.nuxt/
+dist/
+build/
