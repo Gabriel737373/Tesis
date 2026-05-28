@@ -1,14 +1,23 @@
 package com.__01.APP.Tesis.controllers;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.__01.APP.Tesis.dto.ApiResponse;
 import com.__01.APP.Tesis.dto.LoginRequest;
 import com.__01.APP.Tesis.dto.RegistroRequest;
 import com.__01.APP.Tesis.dto.UsuarioGeneralResponse;
 import com.__01.APP.Tesis.services.UsuarioGeneralService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -61,7 +70,7 @@ public class UsuarioGeneralController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/obtener/{id}")
     public ResponseEntity<ApiResponse<UsuarioGeneralResponse>> obtenerPorId(@PathVariable Long id) {
         try {
             UsuarioGeneralResponse usuario = usuarioGeneralService.obtenerPorId(id);
@@ -97,7 +106,7 @@ public class UsuarioGeneralController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/listar")
     public ResponseEntity<ApiResponse<List<UsuarioGeneralResponse>>> listarTodos() {
         try {
             List<UsuarioGeneralResponse> usuarios = usuarioGeneralService.listar();
@@ -110,7 +119,7 @@ public class UsuarioGeneralController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {
         try {
             boolean eliminado = usuarioGeneralService.eliminar(id);
