@@ -1,8 +1,31 @@
-package com.__01.APP.Tesis.dto;
+package com.__01.APP.Tesis.Usuario.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(
+    name = "RegistroRequest",
+    description = "Solicitud para registrar un nuevo usuario"
+)
 public class RegistroRequest {
+    @Schema(
+        description = "Nombre de usuario único",
+        example = "maria_gonzalez",
+        requiredMode = Schema.RequiredMode.REQUIRED
+    )
     private String nombreUsuario;
+    
+    @Schema(
+        description = "Email del usuario",
+        example = "maria@example.com",
+        requiredMode = Schema.RequiredMode.REQUIRED
+    )
     private String email;
+    
+    @Schema(
+        description = "Contraseña del usuario (mínimo 6 caracteres)",
+        example = "SecurePassword123",
+        requiredMode = Schema.RequiredMode.REQUIRED
+    )
     private String contrasena;
 
     public RegistroRequest() {}

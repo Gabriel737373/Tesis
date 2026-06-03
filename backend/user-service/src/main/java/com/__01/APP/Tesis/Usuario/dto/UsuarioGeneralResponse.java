@@ -1,13 +1,29 @@
-package com.__01.APP.Tesis.dto;
+package com.__01.APP.Tesis.Usuario.dto;
 
 import java.time.LocalDateTime;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(
+    name = "UsuarioGeneralResponse",
+    description = "Respuesta con datos del usuario"
+)
 public class UsuarioGeneralResponse {
+    @Schema(description = "ID único del usuario", example = "1")
     private Long id;
+    
+    @Schema(description = "Nombre de usuario", example = "juan_perez")
     private String nombreUsuario;
+    
+    @Schema(description = "Email del usuario", example = "juan@example.com")
     private String email;
+    
+    @Schema(description = "Estado del usuario (activo/inactivo)", example = "true")
     private Boolean activo;
+    
+    @Schema(description = "Fecha de creación del usuario", example = "2026-01-15T10:30:00")
     private LocalDateTime creadoEn;
+    
+    @Schema(description = "Fecha de última actualización", example = "2026-01-15T10:30:00")
     private LocalDateTime actualizadoEn;
 
     public UsuarioGeneralResponse() {}

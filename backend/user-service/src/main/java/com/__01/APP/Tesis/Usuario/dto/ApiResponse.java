@@ -1,8 +1,19 @@
-package com.__01.APP.Tesis.dto;
+package com.__01.APP.Tesis.Usuario.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(
+    name = "ApiResponse",
+    description = "Respuesta estándar de la API con datos genéricos"
+)
 public class ApiResponse<T> {
+    @Schema(description = "Indica si la operación fue exitosa", example = "true")
     private Boolean success;
+    
+    @Schema(description = "Mensaje descriptivo de la operación", example = "Usuario registrado exitosamente")
     private String mensaje;
+    
+    @Schema(description = "Datos de respuesta (puede ser nulo en operaciones sin datos)")
     private T datos;
 
     public ApiResponse() {}

@@ -1,4 +1,4 @@
-package com.__01.APP.Tesis.models;
+package com.__01.APP.Tesis.Usuario.models;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;

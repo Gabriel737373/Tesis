@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 API Documentation - Swagger/OpenAPI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+            font-size: 1.8em;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+        
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .card p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .link-button {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin: 5px 5px 5px 0;
+            transition: background 0.3s;
+        }
+        
+        .link-button:hover {
+            background: #764ba2;
+        }
+        
+        .endpoint {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .endpoint-method {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+        
+        .method-post {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .method-get {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .method-delete {
+            background: #f44336;
+            color: white;
+        }
+        
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .error {
+            color: #f44336;
+            font-weight: bold;
+        }
+        
+        .status-200 { color: #4CAF50; }
+        .status-201 { color: #4CAF50; }
+        .status-400 { color: #FFC107; }
+        .status-401 { color: #FFC107; }
+        .status-404 { color: #FFC107; }
+        .status-500 { color: #f44336; }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #FF9800;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 API Documentation</h1>
+            <p>Swagger/OpenAPI Visual Interface</p>
+        </div>
+        
+        <div class="content">
+            <!-- Section 1: Quick Start -->
+            <div class="section">
+                <h2>🚀 Quick Start</h2>
+                <div class="info-box">
+                    <strong>Paso 1:</strong> Abre una terminal en <code>backend/user-service</code><br>
+                    <strong>Paso 2:</strong> Ejecuta: <code>.\gradlew.bat bootRun</code><br>
+                    <strong>Paso 3:</strong> Abre: <a href="http://localhost:8080/swagger-ui.html" target="_blank">http://localhost:8080/swagger-ui.html</a>
+                </div>
+                
+                <p>¡Eso es todo! Ahora tienes una interfaz visual para probar todos tus endpoints.</p>
+            </div>
+            
+            <!-- Section 2: Access Points -->
+            <div class="section">
+                <h2>🔗 Puntos de Acceso</h2>
+                <table>
+                    <tr>
+                        <th>Recurso</th>
+                        <th>URL</th>
+                        <th>Descripción</th>
+                    </tr>
+                    <tr>
+                        <td>Swagger UI</td>
+                        <td><a href="http://localhost:8080/swagger-ui.html" target="_blank">http://localhost:8080/swagger-ui.html</a></td>
+                        <td>Interfaz visual interactiva</td>
+                    </tr>
+                    <tr>
+                        <td>OpenAPI Spec</td>
+                        <td><a href="http://localhost:8080/v3/api-docs" target="_blank">http://localhost:8080/v3/api-docs</a></td>
+                        <td>Especificación en JSON</td>
+                    </tr>
+                    <tr>
+                        <td>H2 Console</td>
+                        <td><a href="http://localhost:8080/h2-console" target="_blank">http://localhost:8080/h2-console</a></td>
+                        <td>Base de datos en memoria</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- Section 3: Endpoints -->
+            <div class="section">
+                <h2>📡 Endpoints Documentados</h2>
+                
+                <div class="endpoint">
+                    <div>
+                        <span class="endpoint-method method-post">POST</span>
+                        <span class="endpoint-path">/api/usuarios/registro</span>
+                    </div>
+                    <p style="margin-top: 10px; color: #666;">Registra un nuevo usuario en el sistema</p>
+                    <p><span class="status-201">201 Created</span> - Usuario registrado exitosamente</p>
+                    <p><span class="status-400">400 Bad Request</span> - Email duplicado o datos inválidos</p>
+                </div>
+                
+                <div class="endpoint">
+                    <div>
+                        <span class="endpoint-method method-post">POST</span>
+                        <span class="endpoint-path">/api/usuarios/login</span>
+                    </div>
+                    <p style="margin-top: 10px; color: #666;">Autentica un usuario</p>
+                    <p><span class="status-200">200 OK</span> - Login exitoso</p>
+                    <p><span class="status-401">401 Unauthorized</span> - Credenciales inválidas</p>
+                </div>
+                
+                <div class="endpoint">
+                    <div>
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/usuarios/obtener/{id}</span>
+                    </div>
+                    <p style="margin-top: 10px; color: #666;">Obtiene un usuario por ID</p>
+                    <p><span class="status-200">200 OK</span> - Usuario obtenido</p>
+                    <p><span class="status-404">404 Not Found</span> - Usuario no encontrado</p>
+                </div>
+                
+                <div class="endpoint">
+                    <div>
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/usuarios/email/{email}</span>
+                    </div>
+                    <p style="margin-top: 10px; color: #666;">Obtiene un usuario por email</p>
+                    <p><span class="status-200">200 OK</span> - Usuario obtenido</p>
+                    <p><span class="status-404">404 Not Found</span> - Usuario no encontrado</p>
+                </div>
+                
+                <div class="endpoint">
+                    <div>
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/usuarios/listar</span>
+                    </div>
+                    <p style="margin-top: 10px; color: #666;">Obtiene la lista de todos los usuarios</p>
+                    <p><span class="status-200">200 OK</span> - Lista obtenida</p>
+                </div>
+                
+                <div class="endpoint">
+                    <div>
+                        <span class="endpoint-method method-delete">DELETE</span>
+                        <span class="endpoint-path">/api/usuarios/delete/{id}</span>
+                    </div>
+                    <p style="margin-top: 10px; color: #666;">Elimina un usuario</p>
+                    <p><span class="status-200">200 OK</span> - Usuario eliminado</p>
+                    <p><span class="status-404">404 Not Found</span> - Usuario no encontrado</p>
+                </div>
+            </div>
+            
+            <!-- Section 4: What's Included -->
+            <div class="section">
+                <h2>✅ Lo que se ha Configurado</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>📦 Dependencias</h3>
+                        <p>Agregada: <code>springdoc-openapi-starter-webmvc-ui</code> v2.0.2</p>
+                        <p>Proporciona la interfaz Swagger UI</p>
+                    </div>
+                    <div class="card">
+                        <h3>⚙️ Configuración</h3>
+                        <p>Archivo: <code>OpenApiConfig.java</code></p>
+                        <p>Define título, versión y descripción de la API</p>
+                    </div>
+                    <div class="card">
+                        <h3>📝 Anotaciones</h3>
+                        <p>Agregadas a controladores y DTOs</p>
+                        <p>@Operation, @ApiResponse, @Schema</p>
+                    </div>
+                    <div class="card">
+                        <h3>📚 Documentación</h3>
+                        <p>6 endpoints completamente documentados</p>
+                        <p>Con ejemplos de éxito y error</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 5: Documentation Files -->
+            <div class="section">
+                <h2>📖 Archivos de Documentación Incluidos</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>QUICK_START.md</h3>
+                        <p>Cómo ejecutar y acceder a Swagger en 2 minutos</p>
+                        <a href="#" class="link-button">Ver archivo</a>
+                    </div>
+                    <div class="card">
+                        <h3>SWAGGER_GUIDE.md</h3>
+                        <p>Guía completa para usar Swagger UI interactivamente</p>
+                        <a href="#" class="link-button">Ver archivo</a>
+                    </div>
+                    <div class="card">
+                        <h3>CURL_EXAMPLES.md</h3>
+                        <p>Ejemplos de CURL para probar desde terminal</p>
+                        <a href="#" class="link-button">Ver archivo</a>
+                    </div>
+                    <div class="card">
+                        <h3>API_DOCUMENTATION.md</h3>
+                        <p>Índice principal de toda la documentación</p>
+                        <a href="#" class="link-button">Ver archivo</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 6: Testing Flow -->
+            <div class="section">
+                <h2>🧪 Flujo de Prueba Recomendado</h2>
+                <ol style="margin-left: 20px;">
+                    <li><strong>Registra un usuario</strong> - POST /api/usuarios/registro
+                        <div class="code-block">POST /api/usuarios/registro
+{
+  "nombreUsuario": "test_user",
+  "email": "test@example.com",
+  "contrasena": "password123"
+}</div>
+                    </li>
+                    <li><strong>Inicia sesión</strong> - POST /api/usuarios/login</li>
+                    <li><strong>Obtén por ID</strong> - GET /api/usuarios/obtener/{id}</li>
+                    <li><strong>Obtén por email</strong> - GET /api/usuarios/email/{email}</li>
+                    <li><strong>Lista todos</strong> - GET /api/usuarios/listar</li>
+                    <li><strong>Prueba errores</strong> - Usa datos inválidos o inexistentes</li>
+                    <li><strong>Elimina usuario</strong> - DELETE /api/usuarios/delete/{id}</li>
+                </ol>
+            </div>
+            
+            <!-- Section 7: Response Format -->
+            <div class="section">
+                <h2>📊 Formato de Respuesta Estándar</h2>
+                <div class="info-box">
+                    <p>Todas las respuestas siguen este formato JSON:</p>
+                </div>
+                <div class="code-block">{
+  "success": boolean,      // true para éxito, false para error
+  "mensaje": string,       // Descripción del resultado
+  "datos": object|null     // Datos de respuesta (null en errores)
+}</div>
+                
+                <h3>Ejemplo de Éxito:</h3>
+                <div class="code-block">{
+  "success": true,
+  "mensaje": "Login exitoso",
+  "datos": {
+    "id": 1,
+    "nombreUsuario": "juan_perez",
+    "email": "juan@example.com",
+    "activo": true,
+    "creadoEn": "2026-01-15T10:30:00",
+    "actualizadoEn": "2026-01-15T10:30:00"
+  }
+}</div>
+                
+                <h3>Ejemplo de Error:</h3>
+                <div class="code-block">{
+  "success": false,
+  "mensaje": "Nombre de usuario o contraseña incorrectos",
+  "datos": null
+}</div>
+            </div>
+            
+            <!-- Section 8: Tips -->
+            <div class="section">
+                <h2>💡 Consejos para Usar Swagger</h2>
+                <div class="warning-box">
+                    <p><strong>⚠️ Nota importante:</strong> La base de datos está en memoria (H2). Los datos se pierden al reiniciar la aplicación.</p>
+                </div>
+                
+                <ul style="margin-left: 20px;">
+                    <li>✅ <strong>Comienza por el registro</strong> - Crea un usuario de prueba</li>
+                    <li>✅ <strong>Guarda el ID</strong> - Lo necesitarás para otras pruebas</li>
+                    <li>✅ <strong>Prueba casos de error</strong> - Intenta operaciones inválidas</li>
+                    <li>✅ <strong>Lee los mensajes</strong> - La API proporciona descripciones claras</li>
+                    <li>✅ <strong>Observa códigos HTTP</strong> - Ayudan a entender el resultado</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>🎉 Tu API está completamente documentada y lista para usar con Swagger/OpenAPI</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">Para más información, consulta API_DOCUMENTATION.md</p>
+        </div>
+    </div>
+</body>
+</html>
