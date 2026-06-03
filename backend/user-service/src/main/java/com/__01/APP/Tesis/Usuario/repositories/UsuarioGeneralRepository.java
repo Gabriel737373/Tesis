@@ -3,7 +3,7 @@ package com.__01.APP.Tesis.Usuario.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.__01.APP.Tesis.Usuario.models.UsuarioGeneral;
+import com.__01.APP.Tesis.Usuario.models.entities.UsuarioGeneral;
 
 import java.util.Optional;
 

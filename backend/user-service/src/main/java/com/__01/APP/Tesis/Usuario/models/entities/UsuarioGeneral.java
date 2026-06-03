@@ -1,8 +1,16 @@
-package com.__01.APP.Tesis.Usuario.models;
+package com.__01.APP.Tesis.Usuario.models.entities;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+
 
 @Entity
 @Table(name = "usuarios_generales", uniqueConstraints = {

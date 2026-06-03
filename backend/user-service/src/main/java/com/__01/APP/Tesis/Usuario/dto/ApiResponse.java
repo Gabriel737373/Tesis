@@ -1,6 +1,6 @@
 package com.__01.APP.Tesis.Usuario.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;  
 
 @Schema(
     name = "ApiResponse",
