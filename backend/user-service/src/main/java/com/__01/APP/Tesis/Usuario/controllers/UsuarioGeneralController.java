@@ -1,4 +1,4 @@
-package com.__01.APP.Tesis.controllers;
+package com.__01.APP.Tesis.Usuario.controllers;
 
 import java.util.List;
 
@@ -13,15 +13,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.__01.APP.Tesis.dto.ApiResponse;
-import com.__01.APP.Tesis.dto.LoginRequest;
-import com.__01.APP.Tesis.dto.RegistroRequest;
-import com.__01.APP.Tesis.dto.UsuarioGeneralResponse;
-import com.__01.APP.Tesis.services.UsuarioGeneralService;
+import com.__01.APP.Tesis.Usuario.dto.ApiResponse;
+import com.__01.APP.Tesis.Usuario.dto.LoginRequest;
+import com.__01.APP.Tesis.Usuario.dto.RegistroRequest;
+import com.__01.APP.Tesis.Usuario.dto.UsuarioGeneralResponse;
+import com.__01.APP.Tesis.Usuario.services.UsuarioGeneralService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/usuarios")
 @CrossOrigin(origins = {"*"})
+@Tag(name = "Gestión de Usuarios", description = "Endpoints para registro, login y gestión de usuarios")
 public class UsuarioGeneralController {
 
     private final UsuarioGeneralService usuarioGeneralService;
@@ -31,6 +35,7 @@ public class UsuarioGeneralController {
     }
 
     @PostMapping("/registro")
+    @Operation(summary = "Registrar nuevo usuario", description = "Crea un nuevo usuario en el sistema con validaciones de email y contraseña")
     public ResponseEntity<ApiResponse<UsuarioGeneralResponse>> registro(@RequestBody RegistroRequest request) {
         try {
             UsuarioGeneralResponse response = usuarioGeneralService.registrar(
@@ -50,6 +55,7 @@ public class UsuarioGeneralController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Iniciar sesión de usuario", description = "Autentica al usuario y retorna sus datos si las credenciales son válidas")
     public ResponseEntity<ApiResponse<UsuarioGeneralResponse>> login(@RequestBody LoginRequest request) {
         try {
             UsuarioGeneralResponse usuario = usuarioGeneralService.verificarCredenciales(
@@ -71,6 +77,7 @@ public class UsuarioGeneralController {
     }
 
     @GetMapping("/obtener/{id}")
+    @Operation(summary = "Obtener usuario por ID", description = "Obtiene un usuario por su identificador único")
     public ResponseEntity<ApiResponse<UsuarioGeneralResponse>> obtenerPorId(@PathVariable Long id) {
         try {
             UsuarioGeneralResponse usuario = usuarioGeneralService.obtenerPorId(id);
@@ -89,6 +96,7 @@ public class UsuarioGeneralController {
     }
 
     @GetMapping("/email/{email}")
+    @Operation(summary = "Obtener usuario por email", description = "Busca un usuario por su dirección de correo electrónico")
     public ResponseEntity<ApiResponse<UsuarioGeneralResponse>> obtenerPorEmail(@PathVariable String email) {
         try {
             UsuarioGeneralResponse usuario = usuarioGeneralService.obtenerPorEmail(email);
@@ -107,6 +115,7 @@ public class UsuarioGeneralController {
     }
 
     @GetMapping("/listar")
+    @Operation(summary = "Listar todos los usuarios", description = "Obtiene una lista de todos los usuarios registrados en el sistema")
     public ResponseEntity<ApiResponse<List<UsuarioGeneralResponse>>> listarTodos() {
         try {
             List<UsuarioGeneralResponse> usuarios = usuarioGeneralService.listar();
@@ -120,6 +129,7 @@ public class UsuarioGeneralController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @Operation(summary = "Eliminar usuario", description = "Elimina permanentemente un usuario del sistema por su ID")
     public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {
         try {
             boolean eliminado = usuarioGeneralService.eliminar(id);

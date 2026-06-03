@@ -1,8 +1,9 @@
-package com.__01.APP.Tesis.repositories;
+package com.__01.APP.Tesis.Usuario.repositories;
 
-import com.__01.APP.Tesis.models.UsuarioGeneral;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.__01.APP.Tesis.Usuario.models.UsuarioGeneral;
 
 import java.util.Optional;
 

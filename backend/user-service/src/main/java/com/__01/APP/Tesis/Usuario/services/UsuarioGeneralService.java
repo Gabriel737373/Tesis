@@ -1,8 +1,9 @@
-package com.__01.APP.Tesis.services;
+package com.__01.APP.Tesis.Usuario.services;
 
-import com.__01.APP.Tesis.dto.UsuarioGeneralResponse;
-import com.__01.APP.Tesis.models.UsuarioGeneral;
-import com.__01.APP.Tesis.repositories.UsuarioGeneralRepository;
+import com.__01.APP.Tesis.Usuario.dto.UsuarioGeneralResponse;
+import com.__01.APP.Tesis.Usuario.models.UsuarioGeneral;
+import com.__01.APP.Tesis.Usuario.repositories.UsuarioGeneralRepository;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
