@@ -1,9 +1,4 @@
-<<<<<<<< HEAD:backend/user-service/src/main/java/com/__01/APP/Tesis/Usuario/models/entities/UsuarioGeneral.java
 package com.__01.APP.Tesis.Usuario.models.entities;
-========
-package com.__01.APP.Tesis.Usuario.models;
->>>>>>>> a671c442f8d4471ebfe5e9368e528f90db5463bc:backend/user-service/src/main/java/com/__01/APP/Tesis/Usuario/models/UsuarioGeneral.java
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 

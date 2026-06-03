@@ -1,11 +1,7 @@
 package com.__01.APP.Tesis.Usuario.services;
 
 import com.__01.APP.Tesis.Usuario.dto.UsuarioGeneralResponse;
-<<<<<<< HEAD
 import com.__01.APP.Tesis.Usuario.models.entities.UsuarioGeneral;
-=======
-import com.__01.APP.Tesis.Usuario.models.UsuarioGeneral;
->>>>>>> a671c442f8d4471ebfe5e9368e528f90db5463bc
 import com.__01.APP.Tesis.Usuario.repositories.UsuarioGeneralRepository;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
