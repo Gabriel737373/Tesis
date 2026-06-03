@@ -1,4 +1,4 @@
-package com.__01.APP.Tesis.Usuario.config;
+package com.__01.APP.Tesis.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
