@@ -1,4 +1,4 @@
-package com.__01.APP.Tesis.Usuario.exception;
+package com.__01.APP.Tesis.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
