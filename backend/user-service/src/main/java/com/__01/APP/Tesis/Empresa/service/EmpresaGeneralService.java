@@ -28,7 +28,7 @@ public class EmpresaGeneralService {
         if (empresaGeneralRepository.existsByNombreEmpresa(nombreEmpresa)) {
             throw new IllegalArgumentException("El nombre de empresa ya existe");
         }
-        if (empresaGeneralRepository.existsByEmail(emailEmpresa)) {
+        if (empresaGeneralRepository.existsByEmailEmpresa(emailEmpresa)) {
             throw new IllegalArgumentException("El email ya está registrado");
         }
         if (contrasena.length() < 6) {
@@ -57,7 +57,7 @@ public class EmpresaGeneralService {
     }
 
     public EmpresaGeneralResponse obtenerPorEmail(String emailEmpresa) {
-        Optional<EmpresaGeneral> empresa = empresaGeneralRepository.findByEmail(emailEmpresa);
+        Optional<EmpresaGeneral> empresa = empresaGeneralRepository.findByEmailEmpresa(emailEmpresa);
         return empresa.map(this::convertToResponse).orElse(null);
     }
 
@@ -78,7 +78,7 @@ public class EmpresaGeneralService {
     }
 
     public EmpresaGeneralResponse verificarCredenciales(String emailEmpresa, String contrasena) {
-        Optional<EmpresaGeneral> empresaOpt = empresaGeneralRepository.findByEmail(emailEmpresa);
+        Optional<EmpresaGeneral> empresaOpt = empresaGeneralRepository.findByEmailEmpresa(emailEmpresa);
         if (empresaOpt.isPresent()) {
             EmpresaGeneral empresa = empresaOpt.get();
             if (passwordEncoder.matches(contrasena, empresa.getContrasena())) {

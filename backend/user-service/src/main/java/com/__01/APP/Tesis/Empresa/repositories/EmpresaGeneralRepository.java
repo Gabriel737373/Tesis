@@ -11,7 +11,7 @@ import com.__01.APP.Tesis.Empresa.models.entities.EmpresaGeneral;
 public interface EmpresaGeneralRepository extends JpaRepository<EmpresaGeneral, Long> {
     Optional<EmpresaGeneral> findByNombreEmpresa(String nombreEmpresa);
     boolean existsByNombreEmpresa(String nombreEmpresa);
-    Optional<EmpresaGeneral> findByEmail(String email);
-    boolean existsByEmail(String email);
+    Optional<EmpresaGeneral> findByEmailEmpresa(String emailEmpresa);
+    boolean existsByEmailEmpresa(String emailEmpresa);
 
 }
