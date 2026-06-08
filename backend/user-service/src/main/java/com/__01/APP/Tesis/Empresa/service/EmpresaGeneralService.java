@@ -1,6 +1,9 @@
 package com.__01.APP.Tesis.Empresa.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,21 +47,45 @@ public class EmpresaGeneralService {
     }
 
     public EmpresaGeneralResponse obtenerPorId(Long id) {
-        return empresaGeneralRepository.findById(id)
-                .map(this::convertToResponse)
-                .orElse(null);
+        Optional<EmpresaGeneral> empresa = empresaGeneralRepository.findById(id);
+        return empresa.map(this::convertToResponse).orElse(null);
     }
 
     public EmpresaGeneralResponse obtenerPorNombreEmpresa(String nombreEmpresa) {
-        return empresaGeneralRepository.findByNombreEmpresa(nombreEmpresa)
-                .map(this::convertToResponse)
-                .orElse(null);
+        Optional<EmpresaGeneral> empresa = empresaGeneralRepository.findByNombreEmpresa(nombreEmpresa);
+        return empresa.map(this::convertToResponse).orElse(null);
     }
 
     public EmpresaGeneralResponse obtenerPorEmail(String emailEmpresa) {
-        return empresaGeneralRepository.findByEmail(emailEmpresa)
-                .map(this::convertToResponse)
-                .orElse(null);
+        Optional<EmpresaGeneral> empresa = empresaGeneralRepository.findByEmail(emailEmpresa);
+        return empresa.map(this::convertToResponse).orElse(null);
+    }
+
+    public List<EmpresaGeneralResponse> obtenerTodas() {
+        return empresaGeneralRepository.findAll()
+            .stream()
+            .map(this::convertToResponse)
+            .collect(Collectors.toList());
+    }
+
+    public boolean eliminarPorId(Long id) {
+        if (!empresaGeneralRepository.existsById(id)) {
+            return false;
+
+        }
+        empresaGeneralRepository.deleteById(id);
+        return true;
+    }
+
+    public EmpresaGeneralResponse verificarCredenciales(String emailEmpresa, String contrasena) {
+        Optional<EmpresaGeneral> empresaOpt = empresaGeneralRepository.findByEmail(emailEmpresa);
+        if (empresaOpt.isPresent()) {
+            EmpresaGeneral empresa = empresaOpt.get();
+            if (passwordEncoder.matches(contrasena, empresa.getContrasena())) {
+                return convertToResponse(empresa);
+            }
+        }
+        throw new IllegalArgumentException("Credenciales inválidas");
     }
 
     private EmpresaGeneralResponse convertToResponse(EmpresaGeneral empresa) {

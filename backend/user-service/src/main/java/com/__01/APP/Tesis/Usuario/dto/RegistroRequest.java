@@ -59,4 +59,5 @@ public class RegistroRequest {
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
     }
+    
 }
