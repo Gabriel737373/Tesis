@@ -1,4 +1,5 @@
 plugins {
+	kotlin("jvm") version "2.2.0"
 	id("org.springframework.boot") version "4.0.6"
 	id("io.spring.dependency-management") version "1.1.7"
     java
@@ -18,6 +19,8 @@ repositories {
 }
 
 dependencies {
+	implementation(kotlin("reflect"))
+	implementation(kotlin("stdlib"))
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -34,4 +37,9 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+kotlin {
+	sourceSets["main"].kotlin.srcDir("src/main/java")
+	sourceSets["test"].kotlin.srcDir("src/test/java")
 }
