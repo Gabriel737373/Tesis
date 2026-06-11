@@ -38,11 +38,9 @@ public class EmpresaGeneralController {
     @Operation(summary = "Registrar nueva empresa", description = "Crea una nueva empresa en el sistema con validaciones de email y contraseña")
     public ResponseEntity<ApiResponse<EmpresaGeneralResponse>> registro(@RequestBody RegistroEmpresaRequest request) {
         try {
-            EmpresaGeneralResponse response = empresaGeneralService.registrar(
-                request.getNombreEmpresa(),
-                request.getEmail(),
-                request.getContrasena()
-            );
+            // Ahora pasamos el objeto request directamente
+            EmpresaGeneralResponse response = empresaGeneralService.registrar(request);
+            
             return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ApiResponse<>(true, "Empresa registrada exitosamente", response));
         } catch (IllegalArgumentException e) {

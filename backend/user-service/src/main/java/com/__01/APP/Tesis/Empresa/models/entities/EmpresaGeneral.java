@@ -5,9 +5,12 @@ import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType; // NUEVO
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn; // NUEVO
+import jakarta.persistence.ManyToOne; // NUEVO
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -29,15 +32,20 @@ public class EmpresaGeneral {
     @Column(nullable = false, unique = true, length = 100)
     private String emailEmpresa;
 
-    // ¡NUEVO!: Faltaba la contraseña para que pudieran iniciar sesión
     @Column(nullable = false)
     private String contrasena;
 
-    @Column(length = 20) // Le quité el nullable=false temporalmente para que no falle al registrar solo con 3 datos
+    @Column(length = 20) 
     private String telefonoEmpresa;
 
-    @Column(length = 200) // Lo mismo aquí
+    @Column(length = 200)
     private String direccionEmpresa;
+
+    // --- ¡INICIO DE LO NUEVO! ---
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tipo_empresa_id") // Así se llamará la columna en la BD
+    private TipoEmpresa tipoEmpresa;
+    // --- ¡FIN DE LO NUEVO! ---
 
     @Column(name = "actualizado_en", nullable = false)
     private LocalDateTime actualizadoEn;
@@ -45,18 +53,15 @@ public class EmpresaGeneral {
     @Column(name = "creado_en", nullable = false, updatable = false)
     private LocalDateTime creadoEn;
 
-    // Constructores
     public EmpresaGeneral() {
     }
 
-    // ¡NUEVO CONSTRUCTOR!: Este es el que busca tu Service exactamente
     public EmpresaGeneral(String nombreEmpresa, String emailEmpresa, String contrasena) {
         this.nombreEmpresa = nombreEmpresa;
         this.emailEmpresa = emailEmpresa;
         this.contrasena = contrasena;
     }
 
-    // (Opcional) Puedes mantener el constructor largo si lo usas en otro lado
     public EmpresaGeneral(String nombreEmpresa, String emailEmpresa, String contrasena, String telefonoEmpresa, String direccionEmpresa) {
         this.nombreEmpresa = nombreEmpresa;
         this.emailEmpresa = emailEmpresa;
@@ -65,7 +70,6 @@ public class EmpresaGeneral {
         this.direccionEmpresa = direccionEmpresa;
     }
 
-    // Funciones automáticas para las fechas (¡Muy recomendado!)
     @PrePersist
     protected void onCreate() {
         creadoEn = LocalDateTime.now();
@@ -77,7 +81,7 @@ public class EmpresaGeneral {
         actualizadoEn = LocalDateTime.now();
     }
 
-    // --- GETTERS Y SETTERS ---
+    // GETTERS Y SETTERS
     public Long getId() { return id; }
     
     public String getNombreEmpresa() { return nombreEmpresa; }
@@ -86,7 +90,6 @@ public class EmpresaGeneral {
     public String getEmailEmpresa() { return emailEmpresa; }
     public void setEmailEmpresa(String emailEmpresa) { this.emailEmpresa = emailEmpresa; }
 
-    // Getters y Setters de la contraseña
     public String getContrasena() { return contrasena; }
     public void setContrasena(String contrasena) { this.contrasena = contrasena; }
 
@@ -95,6 +98,10 @@ public class EmpresaGeneral {
 
     public String getDireccionEmpresa() { return direccionEmpresa; }
     public void setDireccionEmpresa(String direccionEmpresa) { this.direccionEmpresa = direccionEmpresa; }
+
+    // ¡NUEVOS GETTER Y SETTER PARA EL TIPO!
+    public TipoEmpresa getTipoEmpresa() { return tipoEmpresa; }
+    public void setTipoEmpresa(TipoEmpresa tipoEmpresa) { this.tipoEmpresa = tipoEmpresa; }
 
     public LocalDateTime getActualizadoEn() { return actualizadoEn; }
     public void setActualizadoEn(LocalDateTime actualizadoEn) { this.actualizadoEn = actualizadoEn; }

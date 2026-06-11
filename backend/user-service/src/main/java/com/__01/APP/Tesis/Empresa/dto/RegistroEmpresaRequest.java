@@ -7,57 +7,37 @@ import io.swagger.v3.oas.annotations.media.Schema;
     description = "Solicitud para registrar una nueva empresa"
 )
 public class RegistroEmpresaRequest {
-    @Schema(
-        description = "Nombre de la empresa",
-        example = "Tech Solutions S.A.",
-        requiredMode = Schema.RequiredMode.REQUIRED
-    )
+    @Schema(description = "Nombre de la empresa", example = "Tech Solutions S.A.", requiredMode = Schema.RequiredMode.REQUIRED)
     private String nombreEmpresa;
     
-    @Schema(
-        description = "Email de contacto de la empresa",
-        example = "contacto@techsolutions.com",
-        requiredMode = Schema.RequiredMode.REQUIRED
-    )
+    @Schema(description = "Email de contacto de la empresa", example = "contacto@techsolutions.com", requiredMode = Schema.RequiredMode.REQUIRED)
     private String email;
     
-    @Schema(
-        description = "Contraseña para el acceso a la cuenta de la empresa",
-        example = "contrasenaSegura123",
-        requiredMode = Schema.RequiredMode.REQUIRED
-    )
+    @Schema(description = "Contraseña para el acceso", example = "contrasenaSegura123", requiredMode = Schema.RequiredMode.REQUIRED)
     private String contrasena;
+    
+    @Schema(description = "ID del tipo de empresa", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
+    private Long tipoEmpresaId; // ¡AGREGADO!
 
     public RegistroEmpresaRequest() {}
 
-    public RegistroEmpresaRequest(String nombreEmpresa, String email, String contrasena) {
+    public RegistroEmpresaRequest(String nombreEmpresa, String email, String contrasena, Long tipoEmpresaId) {
         this.nombreEmpresa = nombreEmpresa;
         this.email = email;
         this.contrasena = contrasena;
+        this.tipoEmpresaId = tipoEmpresaId;
     }
 
-    public String getNombreEmpresa() {
-        return nombreEmpresa;
-    }
+    // Getters y Setters
+    public String getNombreEmpresa() { return nombreEmpresa; }
+    public void setNombreEmpresa(String nombreEmpresa) { this.nombreEmpresa = nombreEmpresa; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getContrasena() {
-        return contrasena;
-    }
+    public String getContrasena() { return contrasena; }
+    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
 
-    public void setNombreEmpresa(String nombreEmpresa) {
-        this.nombreEmpresa = nombreEmpresa;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-
+    public Long getTipoEmpresaId() { return tipoEmpresaId; }
+    public void setTipoEmpresaId(Long tipoEmpresaId) { this.tipoEmpresaId = tipoEmpresaId; }
 }
