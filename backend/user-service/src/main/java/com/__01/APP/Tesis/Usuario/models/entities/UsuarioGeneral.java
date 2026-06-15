@@ -11,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist; // AÑADIDO
+import jakarta.persistence.PreUpdate; // AÑADIDO
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -37,7 +39,6 @@ public class UsuarioGeneral {
     @Column(name = "activo", nullable = false)
     private Boolean activo;
 
-    // --- RELACIÓN AÑADIDA ---
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tipo_usuario_id")
     private TipoUsuario tipoUsuario;
@@ -48,11 +49,8 @@ public class UsuarioGeneral {
     @Column(name = "actualizado_en", nullable = false)
     private LocalDateTime actualizadoEn;
 
-    // Constructores
     public UsuarioGeneral() {
         this.activo = true;
-        this.creadoEn = LocalDateTime.now();
-        this.actualizadoEn = LocalDateTime.now();
     }
 
     public UsuarioGeneral(String nombreUsuario, String email, String contrasena) {
@@ -60,6 +58,18 @@ public class UsuarioGeneral {
         this.nombreUsuario = nombreUsuario;
         this.email = email;
         this.contrasena = contrasena;
+    }
+
+    // --- MANEJO AUTOMÁTICO DE FECHAS (Mejora) ---
+    @PrePersist
+    protected void onCreate() {
+        creadoEn = LocalDateTime.now();
+        actualizadoEn = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        actualizadoEn = LocalDateTime.now();
     }
 
     // Getters y Setters
@@ -78,7 +88,6 @@ public class UsuarioGeneral {
     public Boolean getActivo() { return activo; }
     public void setActivo(Boolean activo) { this.activo = activo; }
 
-    // Nuevos Getter y Setter para TipoUsuario
     public TipoUsuario getTipoUsuario() { return tipoUsuario; }
     public void setTipoUsuario(TipoUsuario tipoUsuario) { this.tipoUsuario = tipoUsuario; }
 
@@ -99,17 +108,5 @@ public class UsuarioGeneral {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "UsuarioGeneral{" +
-                "id=" + id +
-                ", nombreUsuario='" + nombreUsuario + '\'' +
-                ", email='" + email + '\'' +
-                ", activo=" + activo +
-                ", creadoEn=" + creadoEn +
-                ", actualizadoEn=" + actualizadoEn +
-                '}';
     }
 }
