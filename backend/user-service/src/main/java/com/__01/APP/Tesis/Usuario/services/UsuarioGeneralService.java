@@ -8,39 +8,54 @@ import java.util.stream.Collectors;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.__01.APP.Tesis.Usuario.dto.RegistroRequest;
 import com.__01.APP.Tesis.Usuario.dto.UsuarioGeneralResponse;
+import com.__01.APP.Tesis.Usuario.models.entities.TipoUsuario;
 import com.__01.APP.Tesis.Usuario.models.entities.UsuarioGeneral;
+import com.__01.APP.Tesis.Usuario.repositories.TipoUsuarioRepository;
 import com.__01.APP.Tesis.Usuario.repositories.UsuarioGeneralRepository;
 
 @Service
 public class UsuarioGeneralService {
 
     private final UsuarioGeneralRepository usuarioGeneralRepository;
+    private final TipoUsuarioRepository tipoUsuarioRepository; // INYECCIÓN NUEVA
     private final BCryptPasswordEncoder passwordEncoder;
 
+    // Constructor actualizado
     public UsuarioGeneralService(UsuarioGeneralRepository usuarioGeneralRepository, 
+                                 TipoUsuarioRepository tipoUsuarioRepository,
                                  BCryptPasswordEncoder passwordEncoder) {
         this.usuarioGeneralRepository = usuarioGeneralRepository;
+        this.tipoUsuarioRepository = tipoUsuarioRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UsuarioGeneralResponse registrar(String nombreUsuario, String email, String contrasena) {
-        if (usuarioGeneralRepository.existsByNombreUsuario(nombreUsuario)) {
+    // Actualizado para recibir el DTO completo
+    public UsuarioGeneralResponse registrar(RegistroRequest dto) {
+        if (usuarioGeneralRepository.existsByNombreUsuario(dto.getNombreUsuario())) {
             throw new IllegalArgumentException("El nombre de usuario ya existe");
         }
-        if (usuarioGeneralRepository.existsByEmail(email)) {
+        if (usuarioGeneralRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("El email ya está registrado");
         }
-        if (contrasena.length() < 6) {
+        if (dto.getContrasena().length() < 6) {
             throw new IllegalArgumentException("La contraseña debe tener al menos 6 caracteres");
         }
 
         UsuarioGeneral usuario = new UsuarioGeneral(
-            nombreUsuario,
-            email,
-            passwordEncoder.encode(contrasena)
+            dto.getNombreUsuario(),
+            dto.getEmail(),
+            passwordEncoder.encode(dto.getContrasena())
         );
         usuario.setActualizadoEn(LocalDateTime.now());
+
+        // BUSCAR EL TIPO Y ASIGNARLO
+        if (dto.getTipoUsuarioId() != null) {
+            TipoUsuario tipo = tipoUsuarioRepository.findById(dto.getTipoUsuarioId())
+                .orElseThrow(() -> new IllegalArgumentException("El tipo de usuario seleccionado no existe"));
+            usuario.setTipoUsuario(tipo);
+        }
         
         UsuarioGeneral usuarioGuardado = usuarioGeneralRepository.save(usuario);
         return convertToResponse(usuarioGuardado);
