@@ -5,12 +5,12 @@ import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType; // NUEVO
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn; // NUEVO
-import jakarta.persistence.ManyToOne; // NUEVO
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -41,11 +41,9 @@ public class EmpresaGeneral {
     @Column(length = 200)
     private String direccionEmpresa;
 
-    // --- ¡INICIO DE LO NUEVO! ---
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tipo_empresa_id") // Así se llamará la columna en la BD
+    @JoinColumn(name = "tipo_empresa_id") 
     private TipoEmpresa tipoEmpresa;
-    // --- ¡FIN DE LO NUEVO! ---
 
     @Column(name = "actualizado_en", nullable = false)
     private LocalDateTime actualizadoEn;
@@ -83,6 +81,7 @@ public class EmpresaGeneral {
 
     // GETTERS Y SETTERS
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; } // ¡AÑADIDO PARA LOS TESTS!
     
     public String getNombreEmpresa() { return nombreEmpresa; }
     public void setNombreEmpresa(String nombreEmpresa) { this.nombreEmpresa = nombreEmpresa; }
@@ -99,7 +98,6 @@ public class EmpresaGeneral {
     public String getDireccionEmpresa() { return direccionEmpresa; }
     public void setDireccionEmpresa(String direccionEmpresa) { this.direccionEmpresa = direccionEmpresa; }
 
-    // ¡NUEVOS GETTER Y SETTER PARA EL TIPO!
     public TipoEmpresa getTipoEmpresa() { return tipoEmpresa; }
     public void setTipoEmpresa(TipoEmpresa tipoEmpresa) { this.tipoEmpresa = tipoEmpresa; }
 

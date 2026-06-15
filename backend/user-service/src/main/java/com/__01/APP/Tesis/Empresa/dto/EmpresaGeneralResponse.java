@@ -7,38 +7,39 @@ import io.swagger.v3.oas.annotations.media.Schema;
     description = "Respuesta con datos de la empresa"
 )
 public class EmpresaGeneralResponse {
+    
     @Schema(description = "ID único de la empresa", example = "1")
-    private Long idEmpresa;
+    private Long id; // Cambiado de idEmpresa a id
     
     @Schema(description = "Nombre de la empresa", example = "Tech Solutions S.A.")
     private String nombreEmpresa;
     
     @Schema(description = "Email de contacto de la empresa", example = "contacto@techsolutions.com")
-    private String emailContacto;
+    private String emailEmpresa; // Cambiado de emailContacto a emailEmpresa
 
     @Schema(description = "Número de teléfono de la empresa", example = "+1234567890")
-    private String telefonoContacto;
+    private String telefonoEmpresa; // Cambiado de telefonoContacto a telefonoEmpresa
 
     @Schema(description = "Dirección de la empresa", example = "Calle Principal 123, Ciudad")
     private String direccionEmpresa;
 
     public EmpresaGeneralResponse() {}
 
-    public EmpresaGeneralResponse(Long idEmpresa, String nombreEmpresa, String emailContacto,
-                                  String telefonoContacto, String direccionEmpresa) {
-        this.idEmpresa = idEmpresa;
+    public EmpresaGeneralResponse(Long id, String nombreEmpresa, String emailEmpresa,
+                                  String telefonoEmpresa, String direccionEmpresa) {
+        this.id = id;
         this.nombreEmpresa = nombreEmpresa;
-        this.emailContacto = emailContacto;
-        this.telefonoContacto = telefonoContacto;
+        this.emailEmpresa = emailEmpresa;
+        this.telefonoEmpresa = telefonoEmpresa;
         this.direccionEmpresa = direccionEmpresa;
     }
 
-    public Long getIdEmpresa() {
-        return idEmpresa;
+    public Long getId() {
+        return id;
     }
 
-    public void setIdEmpresa(Long idEmpresa) {
-        this.idEmpresa = idEmpresa;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNombreEmpresa() {
@@ -49,20 +50,20 @@ public class EmpresaGeneralResponse {
         this.nombreEmpresa = nombreEmpresa;
     }
 
-    public String getEmailContacto() {
-        return emailContacto;
+    public String getEmailEmpresa() {
+        return emailEmpresa;
     }
 
-    public void setEmailContacto(String emailContacto) {
-        this.emailContacto = emailContacto;
+    public void setEmailEmpresa(String emailEmpresa) {
+        this.emailEmpresa = emailEmpresa;
     }
 
-    public String getTelefonoContacto() {
-        return telefonoContacto;
+    public String getTelefonoEmpresa() {
+        return telefonoEmpresa;
     }
 
-    public void setTelefonoContacto(String telefonoContacto) {
-        this.telefonoContacto = telefonoContacto;
+    public void setTelefonoEmpresa(String telefonoEmpresa) {
+        this.telefonoEmpresa = telefonoEmpresa;
     }
 
     public String getDireccionEmpresa() {
