@@ -11,8 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist; // AÑADIDO
-import jakarta.persistence.PreUpdate; // AÑADIDO
+import jakarta.persistence.PrePersist; 
+import jakarta.persistence.PreUpdate; 
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -39,6 +39,10 @@ public class UsuarioGeneral {
     @Column(name = "activo", nullable = false)
     private Boolean activo;
 
+    // --- NUEVO CAMPO PARA LA FOTO DE PERFIL ---
+    @Column(name = "foto_perfil_url", length = 500)
+    private String fotoPerfilUrl;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tipo_usuario_id")
     private TipoUsuario tipoUsuario;
@@ -60,7 +64,6 @@ public class UsuarioGeneral {
         this.contrasena = contrasena;
     }
 
-    // --- MANEJO AUTOMÁTICO DE FECHAS (Mejora) ---
     @PrePersist
     protected void onCreate() {
         creadoEn = LocalDateTime.now();
@@ -87,6 +90,10 @@ public class UsuarioGeneral {
 
     public Boolean getActivo() { return activo; }
     public void setActivo(Boolean activo) { this.activo = activo; }
+
+    // GETTER Y SETTER DE LA FOTO DE PERFIL
+    public String getFotoPerfilUrl() { return fotoPerfilUrl; }
+    public void setFotoPerfilUrl(String fotoPerfilUrl) { this.fotoPerfilUrl = fotoPerfilUrl; }
 
     public TipoUsuario getTipoUsuario() { return tipoUsuario; }
     public void setTipoUsuario(TipoUsuario tipoUsuario) { this.tipoUsuario = tipoUsuario; }
