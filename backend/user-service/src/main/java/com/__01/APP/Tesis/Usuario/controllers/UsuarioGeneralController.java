@@ -38,11 +38,7 @@ public class UsuarioGeneralController {
     @Operation(summary = "Registrar nuevo usuario", description = "Crea un nuevo usuario en el sistema con validaciones de email y contraseña")
     public ResponseEntity<ApiResponse<UsuarioGeneralResponse>> registro(@RequestBody RegistroRequest request) {
         try {
-            UsuarioGeneralResponse response = usuarioGeneralService.registrar(
-                request.getNombreUsuario(),
-                request.getEmail(),
-                request.getContrasena()
-            );
+            UsuarioGeneralResponse response = usuarioGeneralService.registrar(request);
             return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ApiResponse<>(true, "Usuario registrado exitosamente", response));
         } catch (IllegalArgumentException e) {
