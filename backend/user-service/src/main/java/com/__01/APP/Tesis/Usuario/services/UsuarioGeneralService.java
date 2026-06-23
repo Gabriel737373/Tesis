@@ -19,10 +19,9 @@ import com.__01.APP.Tesis.Usuario.repositories.UsuarioGeneralRepository;
 public class UsuarioGeneralService {
 
     private final UsuarioGeneralRepository usuarioGeneralRepository;
-    private final TipoUsuarioRepository tipoUsuarioRepository; // INYECCIÓN NUEVA
+    private final TipoUsuarioRepository tipoUsuarioRepository; 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    // Constructor actualizado
     public UsuarioGeneralService(UsuarioGeneralRepository usuarioGeneralRepository, 
                                  TipoUsuarioRepository tipoUsuarioRepository,
                                  BCryptPasswordEncoder passwordEncoder) {
@@ -31,7 +30,6 @@ public class UsuarioGeneralService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Actualizado para recibir el DTO completo
     public UsuarioGeneralResponse registrar(RegistroRequest dto) {
         if (usuarioGeneralRepository.existsByNombreUsuario(dto.getNombreUsuario())) {
             throw new IllegalArgumentException("El nombre de usuario ya existe");
@@ -50,10 +48,19 @@ public class UsuarioGeneralService {
         );
         usuario.setActualizadoEn(LocalDateTime.now());
 
-        // BUSCAR EL TIPO Y ASIGNARLO
-        if (dto.getTipoUsuarioId() != null) {
-            TipoUsuario tipo = tipoUsuarioRepository.findById(dto.getTipoUsuarioId())
-                .orElseThrow(() -> new IllegalArgumentException("El tipo de usuario seleccionado no existe"));
+        // --- LÓGICA DE CREACIÓN AUTOMÁTICA (GET OR CREATE) ---
+        if (dto.getTipoUsuarioNombre() != null && !dto.getTipoUsuarioNombre().trim().isEmpty()) {
+            
+            String nombreCategoria = dto.getTipoUsuarioNombre().trim();
+            
+            // Busca la categoría. Si no existe, ejecuta el bloque de código para crearla y guardarla.
+            TipoUsuario tipo = tipoUsuarioRepository.findByCategoriaUsuarioIgnoreCase(nombreCategoria)
+                .orElseGet(() -> {
+                    TipoUsuario nuevoTipo = new TipoUsuario();
+                    nuevoTipo.setCategoriaUsuario(nombreCategoria); // Asigna el nombre
+                    return tipoUsuarioRepository.save(nuevoTipo);   // Lo guarda en BD y lo retorna
+                });
+                
             usuario.setTipoUsuario(tipo);
         }
         

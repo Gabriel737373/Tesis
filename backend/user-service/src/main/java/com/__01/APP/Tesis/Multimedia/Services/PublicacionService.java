@@ -10,7 +10,7 @@ import com.__01.APP.Tesis.Empresa.repositories.EmpresaGeneralRepository;
 import com.__01.APP.Tesis.Multimedia.Dto.PublicacionRequest;
 import com.__01.APP.Tesis.Multimedia.Dto.PublicacionResponse;
 import com.__01.APP.Tesis.Multimedia.Models.Entities.Publicacion;
-import com.__01.APP.Tesis.Multimedia.Repository.PublicacionRepository; // Asegúrate que la ruta sea correcta
+import com.__01.APP.Tesis.Multimedia.Repository.PublicacionRepository;
 import com.__01.APP.Tesis.Usuario.models.entities.UsuarioGeneral;
 import com.__01.APP.Tesis.Usuario.repositories.UsuarioGeneralRepository;
 
@@ -29,24 +29,38 @@ public class PublicacionService {
         this.empresaGeneralRepository = empresaGeneralRepository;
     }
 
-    // 1. CREAR PUBLICACIÓN
+    // 1. CREAR PUBLICACIÓN (Lógica Polimórfica "Usuario O Empresa")
     public PublicacionResponse crear(PublicacionRequest dto) {
         Publicacion publicacion = new Publicacion();
         publicacion.setTitulo(dto.getTitulo());
         publicacion.setArchivoUrl(dto.getArchivoUrl());
+        
+        // Si mantuviste tipoMultimedia en tu DTO, descomenta la siguiente línea:
         publicacion.setTipoMultimedia(dto.getTipoMultimedia());
 
-        // Validamos quién está haciendo la publicación
-        if ("USUARIO".equalsIgnoreCase(dto.getTipoAutor())) {
-            UsuarioGeneral usuario = usuarioGeneralRepository.findById(dto.getAutorId())
-                .orElseThrow(() -> new IllegalArgumentException("El usuario no existe"));
+        // Validamos qué datos nos llegaron desde el JSON
+        boolean tieneUsuario = dto.getNombreUsuario() != null && !dto.getNombreUsuario().trim().isEmpty();
+        boolean tieneEmpresa = dto.getNombreEmpresa() != null && !dto.getNombreEmpresa().trim().isEmpty();
+
+        // Regla 1: No pueden venir ambos al mismo tiempo
+        if (tieneUsuario && tieneEmpresa) {
+            throw new IllegalArgumentException("La publicación no puede pertenecer a un usuario y a una empresa al mismo tiempo.");
+        }
+
+        // Regla 2: Tiene que venir al menos uno de los dos
+        if (!tieneUsuario && !tieneEmpresa) {
+            throw new IllegalArgumentException("Debes especificar un 'nombreUsuario' o un 'nombreEmpresa' como autor.");
+        }
+
+        // Asignamos al dueño correcto
+        if (tieneUsuario) {
+            UsuarioGeneral usuario = usuarioGeneralRepository.findByNombreUsuario(dto.getNombreUsuario())
+                .orElseThrow(() -> new IllegalArgumentException("El usuario '" + dto.getNombreUsuario() + "' no existe."));
             publicacion.setUsuario(usuario);
-        } else if ("EMPRESA".equalsIgnoreCase(dto.getTipoAutor())) {
-            EmpresaGeneral empresa = empresaGeneralRepository.findById(dto.getAutorId())
-                .orElseThrow(() -> new IllegalArgumentException("La empresa no existe"));
-            publicacion.setEmpresa(empresa);
         } else {
-            throw new IllegalArgumentException("El tipoAutor debe ser 'USUARIO' o 'EMPRESA'");
+            EmpresaGeneral empresa = empresaGeneralRepository.findByNombreEmpresa(dto.getNombreEmpresa())
+                .orElseThrow(() -> new IllegalArgumentException("La empresa '" + dto.getNombreEmpresa() + "' no existe."));
+            publicacion.setEmpresa(empresa);
         }
 
         Publicacion guardada = publicacionRepository.save(publicacion);

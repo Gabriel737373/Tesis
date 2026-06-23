@@ -11,6 +11,9 @@ import com.__01.APP.Tesis.Usuario.models.entities.TipoUsuario;
 public interface TipoUsuarioRepository extends JpaRepository<TipoUsuario, Long> {
     
     Optional<TipoUsuario> findByCategoriaUsuario(String categoriaUsuario);
+
+    // AÑADIDO: Busca por categoría ignorando mayúsculas/minúsculas
+    Optional<TipoUsuario> findByCategoriaUsuarioIgnoreCase(String categoriaUsuario);
     
     boolean existsByCategoriaUsuario(String categoriaUsuario);
 }

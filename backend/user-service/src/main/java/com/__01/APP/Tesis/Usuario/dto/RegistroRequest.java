@@ -16,17 +16,17 @@ public class RegistroRequest {
     @Schema(description = "Contraseña del usuario (mínimo 6 caracteres)", example = "SecurePassword123", requiredMode = Schema.RequiredMode.REQUIRED)
     private String contrasena;
 
-    // --- NUEVO CAMPO ---
-    @Schema(description = "ID del tipo de usuario", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
-    private Long tipoUsuarioId;
+    // --- CAMPO ACTUALIZADO: Ahora es String y pide el nombre ---
+    @Schema(description = "Nombre o categoría del tipo de usuario", example = "Estudiante", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String tipoUsuarioNombre;
 
     public RegistroRequest() {}
 
-    public RegistroRequest(String nombreUsuario, String email, String contrasena, Long tipoUsuarioId) {
+    public RegistroRequest(String nombreUsuario, String email, String contrasena, String tipoUsuarioNombre) {
         this.nombreUsuario = nombreUsuario;
         this.email = email;
         this.contrasena = contrasena;
-        this.tipoUsuarioId = tipoUsuarioId;
+        this.tipoUsuarioNombre = tipoUsuarioNombre;
     }
 
     public String getNombreUsuario() { return nombreUsuario; }
@@ -38,7 +38,6 @@ public class RegistroRequest {
     public String getContrasena() { return contrasena; }
     public void setContrasena(String contrasena) { this.contrasena = contrasena; }
 
-    // Nuevos Getter y Setter
-    public Long getTipoUsuarioId() { return tipoUsuarioId; }
-    public void setTipoUsuarioId(Long tipoUsuarioId) { this.tipoUsuarioId = tipoUsuarioId; }
+    public String getTipoUsuarioNombre() { return tipoUsuarioNombre; }
+    public void setTipoUsuarioNombre(String tipoUsuarioNombre) { this.tipoUsuarioNombre = tipoUsuarioNombre; }
 }
