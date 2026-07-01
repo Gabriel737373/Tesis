@@ -2,10 +2,12 @@ package com.__01.APP.Tesis.Contactos.services;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
-import com.__01.APP.Tesis.Contactos.dto.ContactoResumen;
 import com.__01.APP.Tesis.Contactos.dto.ContactoDetalle;
+import com.__01.APP.Tesis.Contactos.dto.ContactoResumen;
+import com.__01.APP.Tesis.Contactos.dto.CreateContactoRequest;
 import com.__01.APP.Tesis.Contactos.models.Contacto;
 import com.__01.APP.Tesis.Contactos.repositories.ContactoRepository;
 
@@ -75,5 +77,20 @@ public class ContactoService {
         detalle.updatedAt = contacto.getUpdatedAt() != null ? contacto.getUpdatedAt().toString() : null;
         
         return detalle;
+    }
+
+    public ContactoDetalle enviarMensaje(CreateContactoRequest request) {
+    Contacto contacto = new Contacto();
+    contacto.setReceiverId(request.receiverId);
+    contacto.setName(request.name);
+    contacto.setEmail(request.email);
+    contacto.setPhone(request.phone);
+    contacto.setCompany(request.company);
+    contacto.setSubject(request.subject);
+    contacto.setMessage(request.message);
+    contacto.setRead(false); // Por defecto entra como "No leído"
+
+    Contacto guardado = contactoRepository.save(contacto);
+    return convertirADetalle(guardado);
     }
 }
