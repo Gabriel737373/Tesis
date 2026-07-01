@@ -14,13 +14,13 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable()) 
             .authorizeHttpRequests(auth -> auth
-                // ¡AQUÍ ESTÁ EL CAMBIO! Agregamos la ruta de las empresas
                 .requestMatchers(
                     "/swagger-ui/**", 
                     "/v3/api-docs/**", 
                     "/swagger-ui.html", 
                     "/api/usuarios/**",
-                    "/api/empresas/**" // <-- Añade esta línea (verifica que sea la ruta real de tu controlador)
+                    "/api/empresas/**",
+                    "/api/publicaciones/**" // <-- ¡AQUÍ ESTÁ LA MAGIA! Permiso para el controlador de multimedia
                 ).permitAll()
                 // El resto sigue exigiendo autenticación
                 .anyRequest().authenticated() 

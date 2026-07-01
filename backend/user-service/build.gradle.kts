@@ -33,6 +33,7 @@ dependencies {
 	runtimeOnly("com.mysql:mysql-connector-j")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+	runtimeOnly("org.postgresql:postgresql")
 }
 
 tasks.withType<Test> {

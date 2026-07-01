@@ -3,15 +3,26 @@ package com.__01.APP.Tesis.Multimedia.Controllers;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType; 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping; 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.__01.APP.Tesis.Multimedia.Dto.PublicacionRequest;
+import com.__01.APP.Tesis.Multimedia.Dto.PublicacionRequest; // <-- AÑADIDO: Herramienta para convertir JSON a Java
 import com.__01.APP.Tesis.Multimedia.Dto.PublicacionResponse;
 import com.__01.APP.Tesis.Multimedia.Services.PublicacionService;
-import com.__01.APP.Tesis.Usuario.dto.ApiResponse; // Usamos tu respuesta genérica
+import com.__01.APP.Tesis.Usuario.dto.ApiResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -26,19 +37,44 @@ public class PublicacionController {
         this.publicacionService = publicacionService;
     }
 
-    @PostMapping("/crear")
-    @Operation(summary = "Crear nueva publicación", description = "Crea un post asignado a un usuario o empresa")
-    public ResponseEntity<ApiResponse<PublicacionResponse>> crear(@RequestBody PublicacionRequest request) {
+    @PostMapping(value = "/crear", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Crear nueva publicación", description = "Crea un post asignado a un usuario o empresa subiendo un archivo multimedia")
+    public ResponseEntity<ApiResponse<PublicacionResponse>> crear(
+            @Parameter(description = "Archivo multimedia (imagen o video)", required = true) 
+            @RequestPart("archivo") MultipartFile archivo,
+            
+            // CAMBIO CLAVE: Ahora recibimos un String genérico ("datosJson") en lugar del objeto directo
+            @Parameter(description = "Datos de la publicación en formato JSON", required = true) 
+            @RequestPart("datos") String datosJson) {
+        
         try {
+            // 1. Convertimos el texto (String) a nuestro objeto Java usando el ObjectMapper
+            ObjectMapper objectMapper = new ObjectMapper();
+            PublicacionRequest request = objectMapper.readValue(datosJson, PublicacionRequest.class);
+
+            // 2. Extraemos el nombre original del archivo para simular que generó una URL
+            String nombreArchivo = archivo.getOriginalFilename();
+            String urlSimulada = "https://servidor.com/archivos/" + nombreArchivo;
+            
+            // 3. Le asignamos esa URL simulada al DTO antes de guardarlo en la base de datos
+            request.setArchivoUrl(urlSimulada);
+            
+            // 4. Guardamos en la base de datos
             PublicacionResponse response = publicacionService.crear(request);
+            
             return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ApiResponse<>(true, "Publicación creada con éxito", response));
+                .body(new ApiResponse<>(true, "Publicación creada con éxito (Archivo recibido: " + nombreArchivo + ")", response));
+                
+        } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
+            // Si el JSON viene mal escrito desde Swagger, capturamos el error y te avisamos
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponse<>(false, "Error en el formato del JSON: Verifica que las comillas y llaves estén correctas."));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ApiResponse<>(false, e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ApiResponse<>(false, "Error interno del servidor"));
+                .body(new ApiResponse<>(false, "Error interno del servidor: " + e.getMessage()));
         }
     }
 
