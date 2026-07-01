@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +38,7 @@ public class ContactoController {
     @Operation(summary = "Ver bandeja de entrada", description = "Obtiene los mensajes dirigidos al usuario actual")
     public ResponseEntity<?> getInbox() {
         try {
-            String myUserId = "1";
+            String myUserId = SecurityContextHolder.getContext().getAuthentication().getName();
             
             List<ContactoResumen> inbox = contactoService.obtenerInbox(myUserId);
             return ResponseEntity.ok(new ApiResponse<>(true, "Bandeja obtenida", inbox));

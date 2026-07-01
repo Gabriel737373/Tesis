@@ -143,7 +143,7 @@ public class AuthController {
     // ==========================================
     @GetMapping("/me")
     public ResponseEntity<?> getMe() {
-        // Por ahora enviamos un mock general para que el Front End renderice el perfil correctamente.
+        
         Map<String, Object> response = new HashMap<>();
         response.put("success", true);
         
