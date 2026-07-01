@@ -45,12 +45,7 @@ public class UsuarioGeneralServiceTest {
 
     @BeforeEach
     public void setUp() {
-        requestValido = new RegistroRequest(
-            "juan_perez",
-            "juan@example.com",
-            "contrasenaSegura123",
-            1L
-        );
+        requestValido = new RegistroRequest();
 
         tipoUsuarioMock = new TipoUsuario("Administrador");
         tipoUsuarioMock.setId(1L);
