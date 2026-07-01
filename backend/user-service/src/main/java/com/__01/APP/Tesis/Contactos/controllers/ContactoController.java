@@ -28,8 +28,6 @@ public class ContactoController {
     @Operation(summary = "Ver bandeja de entrada", description = "Obtiene los mensajes dirigidos al usuario actual")
     public ResponseEntity<?> getInbox() {
         try {
-            // TODO: En un futuro extraer esto del Token JWT.
-            // Por ahora simulamos que el usuario logueado es el ID "1" (igual que en Perfil y Auth)
             String myUserId = "1";
             
             List<ContactoResumen> inbox = contactoService.obtenerInbox(myUserId);
