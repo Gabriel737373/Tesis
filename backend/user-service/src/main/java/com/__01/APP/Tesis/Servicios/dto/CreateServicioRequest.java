@@ -1,5 +1,10 @@
 package com.__01.APP.Tesis.Servicios.dto;
 
+import java.util.List;
+
+import com.__01.APP.Tesis.Servicios.models.ContactInfoEmbed;
+import com.__01.APP.Tesis.Servicios.models.PortfolioImageEmbed;
+
 public class CreateServicioRequest {
 
     private String slug;
@@ -20,6 +25,9 @@ public class CreateServicioRequest {
     private Long categoryId;
 
     private String serviceStatus;
+   
+    public List<ContactInfoEmbed> contactInfo;
+    public List<PortfolioImageEmbed> portfolio;
 
     // --- GETTERS Y SETTERS ---
 
@@ -64,4 +72,10 @@ public class CreateServicioRequest {
 
     public String getServiceStatus() { return serviceStatus; }
     public void setServiceStatus(String serviceStatus) { this.serviceStatus = serviceStatus; }
+
+    public List<ContactInfoEmbed> getContactInfo() { return contactInfo; }
+    public void setContactInfo(List<ContactInfoEmbed> contactInfo) { this.contactInfo = contactInfo; }
+
+    public List<PortfolioImageEmbed> getPortfolio() { return portfolio; }
+    public void setPortfolio(List<PortfolioImageEmbed> portfolio) { this.portfolio = portfolio; }
 }

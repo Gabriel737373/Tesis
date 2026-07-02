@@ -35,7 +35,8 @@ public class SecurityConfig {
                     "/api/regiones/**",
                     "/api/ubicaciones/**",
                     "/api/profiles/**",
-                    "/api/contactos/**"
+                    "/api/contactos/**",
+                    "/api/users/**"
                 ).permitAll()
                 // El resto sigue exigiendo autenticación (para el futuro JWT)
                 .anyRequest().authenticated() 
@@ -49,19 +50,18 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // --- CONFIGURACIÓN GLOBAL DE CORS ---
-    // Esto evita el clásico error de "Bloqueado por política CORS" en los navegadores
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        
-        config.setAllowCredentials(false); // Para permitir "*" en origins, esto suele ir en false
-        config.addAllowedOriginPattern("*"); // Permite que tu IP de AWS (o cualquier otra) se conecte
-        config.addAllowedHeader("*"); // Permite todos los headers (Authorization, Content-Type, etc.)
-        config.addAllowedMethod("*"); // Permite GET, POST, PUT, DELETE, PATCH, OPTIONS
+
+        config.setAllowCredentials(true);
+        config.addAllowedOriginPattern("*"); 
+        config.addAllowedHeader("*"); 
+        config.addAllowedMethod("*"); 
         
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
+
 }

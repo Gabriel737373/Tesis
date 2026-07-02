@@ -131,11 +131,12 @@ public class AuthController {
     }
 
     // ==========================================
-    // 3. CERRAR SESIÓN
+    // 3. CERRAR SESIÓN (CORREGIDO)
     // ==========================================
     @PostMapping("/sign-out")
     public ResponseEntity<?> signOut() {
-        return ResponseEntity.ok().build(); 
+        // Ahora devuelve un JSON válido para que el frontend no lance error
+        return ResponseEntity.ok(new ApiResponse<>(true, "Sesión cerrada correctamente", null)); 
     }
 
     // ==========================================
@@ -177,5 +178,12 @@ public class AuthController {
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> payload) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Contraseña restablecida", null));
+    }
+
+    @PostMapping("/send-verification-email")
+    @Operation(summary = "Enviar correo de verificación")
+    public ResponseEntity<?> sendVerificationEmail(@RequestBody EmailPayload payload) {
+        // En el futuro aquí irá la lógica para enviar correos reales (ej. JavaMailSender)
+        return ResponseEntity.ok(new ApiResponse<>(true, "Se ha enviado un nuevo enlace de verificación a tu correo.", null));
     }
 }

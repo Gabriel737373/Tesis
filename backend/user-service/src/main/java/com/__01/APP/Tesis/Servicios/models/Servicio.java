@@ -2,6 +2,8 @@ package com.__01.APP.Tesis.Servicios.models;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
+
 
 @Entity
 @Table(name = "servicios")
@@ -107,4 +109,13 @@ public class Servicio {
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    // Magia de Spring Boot para guardar sub-listas automáticamente
+    @ElementCollection
+    @CollectionTable(name = "servicio_contactos", joinColumns = @JoinColumn(name = "servicio_id"))
+    private List<ContactInfoEmbed> contactInfo;
+
+    @ElementCollection
+    @CollectionTable(name = "servicio_portfolio", joinColumns = @JoinColumn(name = "servicio_id"))
+    private List<PortfolioImageEmbed> portfolio;
 }

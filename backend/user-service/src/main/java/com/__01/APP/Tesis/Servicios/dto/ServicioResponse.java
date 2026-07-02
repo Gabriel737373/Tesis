@@ -1,6 +1,10 @@
 package com.__01.APP.Tesis.Servicios.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import com.__01.APP.Tesis.Servicios.models.ContactInfoEmbed;
+import com.__01.APP.Tesis.Servicios.models.PortfolioImageEmbed;
 
 public class ServicioResponse {
 
@@ -26,6 +30,9 @@ public class ServicioResponse {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public List<ContactInfoEmbed> contactInfo;
+    public List<PortfolioImageEmbed> portfolio;
 
     // --- GETTERS Y SETTERS ---
 
@@ -79,4 +86,10 @@ public class ServicioResponse {
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    public List<ContactInfoEmbed> getContactInfo() { return contactInfo; }
+    public void setContactInfo(List<ContactInfoEmbed> contactInfo) { this.contactInfo = contactInfo; }
+
+    public List<PortfolioImageEmbed> getPortfolio() { return portfolio; }
+    public void setPortfolio(List<PortfolioImageEmbed> portfolio) { this.portfolio = portfolio; }
 }
