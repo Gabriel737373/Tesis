@@ -8,10 +8,6 @@ import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.servers.Server;
 
-/**
- * Configuración de OpenAPI/Swagger para la documentación visual de endpoints
- * Accesible en: http://localhost:8080/swagger-ui.html
- */
 @Configuration
 public class OpenApiConfig {
 
@@ -26,7 +22,7 @@ public class OpenApiConfig {
                     .name("Gabriel")
                     .email("gabriel@example.com")))
             .addServersItem(new Server()
-                .url("http://localhost:8080")
-                .description("Servidor de desarrollo"));
+                .url("/")
+                .description("Servidor Actual"));
     }
 }
