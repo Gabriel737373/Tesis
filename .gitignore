@@ -46,3 +46,4 @@ dist/
 build/
 
 **/oracleJdk-26/
+!gradle/wrapper/gradle-wrapper.jar
