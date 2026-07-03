@@ -27,17 +27,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .cors(Customizer.withDefaults()) // <-- 1. Enciende el CORS Global configurado abajo
+            .cors(Customizer.withDefaults()) // <-- CORS Global encendido
             .csrf(csrf -> csrf.disable()) 
             .authorizeHttpRequests(auth -> auth
+                // --- ¡RUTAS DEL FRONTEND PERMITIDAS! ---
                 .requestMatchers(
-                    "/api/auth/sign-in/**", 
-                    "/api/auth/sign-up/**", 
-                    "/api/usuarios/registro", 
-                    "/api/usuarios/login",
+                    "/api/auth/**", 
+                    "/api/servicios/**",  // <-- Faltaba esto
+                    "/api/eventos/**",    // <-- Faltaba esto
+                    "/api/categorias/**", // <-- Faltaba esto
+                    "/api/regiones/**",   // <-- Faltaba esto
+                    "/api/ubicaciones/**",// <-- Faltaba esto
+                    "/api/profiles/**",   // <-- Faltaba esto
+                    "/api/users/**",      // <-- Faltaba esto para poder borrar cuenta
                     "/swagger-ui/**",
                     "/v3/api-docs/**"
                 ).permitAll()
+                // Todas las demás rutas exigen que el usuario envíe su Token
                 .anyRequest().authenticated() 
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
