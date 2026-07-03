@@ -116,4 +116,15 @@ public class UsuarioGeneralService {
             usuario.getActualizadoEn()
         );
     }
+
+    public UsuarioGeneralResponse verificarCredencialesPorEmail(String email, String contrasena) {
+        // Busca en la base de datos usando el Email en lugar del Nombre de Usuario
+        Optional<UsuarioGeneral> usuario = usuarioGeneralRepository.findByEmail(email);
+        
+        // Verifica que el usuario exista y que la contraseña coincida
+        if (usuario.isPresent() && passwordEncoder.matches(contrasena, usuario.get().getContrasena())) {
+            return convertToResponse(usuario.get());
+        }
+        return null;
+    }
 }

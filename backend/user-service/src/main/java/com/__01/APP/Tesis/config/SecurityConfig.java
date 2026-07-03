@@ -2,66 +2,43 @@ package com.__01.APP.Tesis.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthFilter;
+
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter) {
+        this.jwtAuthFilter = jwtAuthFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .cors(Customizer.withDefaults()) // Habilita el filtro CORS global de abajo
-            .csrf(csrf -> csrf.disable()) 
+            .csrf(cors -> cors.disable()) // Usa tu CorsFilter existente aquí si lo prefieres
             .authorizeHttpRequests(auth -> auth
+                // Rutas públicas (No piden Token)
                 .requestMatchers(
-                    "/swagger-ui/**", 
-                    "/v3/api-docs/**", 
-                    "/swagger-ui.html", 
-                    "/api/usuarios/**",
-                    "/api/empresas/**",
-                    "/api/publicaciones/**",
-                    
-                    // --- ¡RUTAS DEL NUEVO FRONTEND PERMITIDAS! ---
-                    "/api/auth/**",
-                    "/api/servicios/**",
-                    "/api/eventos/**",
-                    "/api/categorias/**",
-                    "/api/regiones/**",
-                    "/api/ubicaciones/**",
-                    "/api/profiles/**",
-                    "/api/contactos/**",
-                    "/api/users/**"
+                    "/api/auth/sign-in/**", 
+                    "/api/auth/sign-up/**", 
+                    "/api/usuarios/registro", 
+                    "/api/usuarios/login",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**"
                 ).permitAll()
-                // El resto sigue exigiendo autenticación (para el futuro JWT)
+                // Todas las demás rutas exigen que el usuario envíe su Token
                 .anyRequest().authenticated() 
-            );
-            
+            )
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            // Añadimos nuestro filtro JWT ANTES del filtro tradicional de contraseñas
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-
-        config.setAllowCredentials(true);
-        config.addAllowedOriginPattern("*"); 
-        config.addAllowedHeader("*"); 
-        config.addAllowedMethod("*"); 
-        
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
-    }
-
 }

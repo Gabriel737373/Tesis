@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +19,7 @@ import com.__01.APP.Tesis.Usuario.dto.ApiResponse;
 import com.__01.APP.Tesis.Usuario.dto.RegistroRequest;
 import com.__01.APP.Tesis.Usuario.dto.UsuarioGeneralResponse;
 import com.__01.APP.Tesis.Usuario.services.UsuarioGeneralService;
+import com.__01.APP.Tesis.config.JwtService; // <-- Importamos tu fábrica de Tokens
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,10 +31,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class AuthController {
 
     private final UsuarioGeneralService usuarioService;
+    private final JwtService jwtService; // <-- Inyectamos el servicio JWT
 
-    // Inyectamos tu servicio existente para reutilizar tu lógica de BD
-    public AuthController(UsuarioGeneralService usuarioService) {
+    // Actualizamos el constructor para recibir ambos servicios
+    public AuthController(UsuarioGeneralService usuarioService, JwtService jwtService) {
         this.usuarioService = usuarioService;
+        this.jwtService = jwtService;
     }
 
     // --- CLASES AUXILIARES PARA RECIBIR LOS JSON DEL FRONTEND ---
@@ -56,18 +61,15 @@ public class AuthController {
     }
 
     // ==========================================
-    // 1. INICIAR SESIÓN
+    // 1. INICIAR SESIÓN (AHORA CON JWT)
     // ==========================================
     @PostMapping("/sign-in/email")
     @Operation(summary = "Login unificado")
     public ResponseEntity<?> signIn(@RequestBody SignInPayload payload) {
         try {
-            // Nota: Si tu backend exige "nombreUsuario" en vez de email, 
-            // usa el email como si fuera el nombre o adáptalo en tu Service.
-            UsuarioGeneralResponse usuario = usuarioService.verificarCredenciales(payload.email, payload.password);
+            UsuarioGeneralResponse usuario = usuarioService.verificarCredencialesPorEmail(payload.email, payload.password);
             
             if (usuario != null) {
-                // El frontend de Next.js espera exactamente esta estructura: { user: {...}, session: {...} }
                 Map<String, Object> response = new HashMap<>();
                 
                 Map<String, Object> userObj = new HashMap<>();
@@ -76,9 +78,14 @@ public class AuthController {
                 userObj.put("email", usuario.getEmail());
                 userObj.put("image", null); 
                 
+                // --- MAGIA JWT AQUÍ ---
+                // Generamos el token real firmado y lo enviamos al frontend
+                String tokenReal = jwtService.generateToken(usuario.getEmail());
+
                 Map<String, Object> sessionObj = new HashMap<>();
-                sessionObj.put("id", UUID.randomUUID().toString()); // Simulamos un token
+                sessionObj.put("id", UUID.randomUUID().toString()); 
                 sessionObj.put("userId", usuario.getId().toString());
+                sessionObj.put("token", tokenReal); // <-- Guardamos el JWT en la sesión
                 
                 response.put("user", userObj);
                 response.put("session", sessionObj);
@@ -100,25 +107,26 @@ public class AuthController {
     @PostMapping("/sign-up/email")
     public ResponseEntity<?> signUp(@RequestBody SignUpPayload payload) {
         try {
-            // Convertimos lo que manda el frontend a tu DTO
             RegistroRequest registro = new RegistroRequest();
             registro.setEmail(payload.email);
             registro.setContrasena(payload.password);
-            // Si RegistroRequest te exige más datos obligatorios, ponlos aquí. Por ejemplo:
             registro.setNombreUsuario(payload.name); 
 
             UsuarioGeneralResponse usuario = usuarioService.registrar(registro);
             
-            // Retornamos el formato esperado
             Map<String, Object> response = new HashMap<>();
             Map<String, Object> userObj = new HashMap<>();
             userObj.put("id", usuario.getId().toString());
             userObj.put("name", payload.name);
             userObj.put("email", payload.email);
             
+            // También generamos el token al registrarse para que no tenga que hacer login de nuevo
+            String tokenReal = jwtService.generateToken(usuario.getEmail());
+
             Map<String, Object> sessionObj = new HashMap<>();
             sessionObj.put("id", UUID.randomUUID().toString());
             sessionObj.put("userId", usuario.getId().toString());
+            sessionObj.put("token", tokenReal);
             
             response.put("user", userObj);
             response.put("session", sessionObj);
@@ -131,30 +139,45 @@ public class AuthController {
     }
 
     // ==========================================
-    // 3. CERRAR SESIÓN (CORREGIDO)
+    // 3. CERRAR SESIÓN
     // ==========================================
     @PostMapping("/sign-out")
     public ResponseEntity<?> signOut() {
-        // Ahora devuelve un JSON válido para que el frontend no lance error
         return ResponseEntity.ok(new ApiResponse<>(true, "Sesión cerrada correctamente", null)); 
     }
 
     // ==========================================
-    // 4. OBTENER USUARIO ACTUAL (Para mantener la sesión en F5)
+    // 4. OBTENER USUARIO ACTUAL (LEE EL TOKEN)
     // ==========================================
     @GetMapping("/me")
     public ResponseEntity<?> getMe() {
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        
-        Map<String, Object> userObj = new HashMap<>();
-        userObj.put("id", "1");
-        userObj.put("name", "Usuario de Pruebas");
-        userObj.put("email", "test@test.com");
-        
-        response.put("data", userObj);
-        return ResponseEntity.ok(response);
+        try {
+            // Spring Security ya validó el token antes de llegar aquí gracias al JwtAuthenticationFilter
+            // Solo extraemos quién es la persona autenticada
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            
+            if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new ApiResponse<>(false, "No autenticado"));
+            }
+
+            UsuarioGeneralResponse usuarioReal = (UsuarioGeneralResponse) auth.getPrincipal();
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            
+            Map<String, Object> userObj = new HashMap<>();
+            userObj.put("id", usuarioReal.getId().toString());
+            userObj.put("name", usuarioReal.getNombreUsuario());
+            userObj.put("email", usuarioReal.getEmail());
+            
+            response.put("data", userObj);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "Error al leer usuario: " + e.getMessage()));
+        }
     }
 
     // ==========================================
@@ -183,7 +206,6 @@ public class AuthController {
     @PostMapping("/send-verification-email")
     @Operation(summary = "Enviar correo de verificación")
     public ResponseEntity<?> sendVerificationEmail(@RequestBody EmailPayload payload) {
-        // En el futuro aquí irá la lógica para enviar correos reales (ej. JavaMailSender)
         return ResponseEntity.ok(new ApiResponse<>(true, "Se ha enviado un nuevo enlace de verificación a tu correo.", null));
     }
 }
